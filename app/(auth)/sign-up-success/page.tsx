@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -22,6 +23,9 @@ export default function Page() {
               <p className="text-sm text-muted-foreground">
                 您已成功注册。请查收邮件以确认您的账户，然后再登录。
               </p>
+              <Link href="/sign-in" className="mt-4 block text-sm text-primary hover:underline">
+                返回登录
+              </Link>
             </CardContent>
           </Card>
         </div>
