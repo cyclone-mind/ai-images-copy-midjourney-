@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { ImageGallery } from "@/components/ui/image-preview";
 import { Sparkles, Plus, CreditCard, AlertCircle } from "lucide-react";
 
 export default function ProtectedPage() {
@@ -118,20 +118,11 @@ export default function ProtectedPage() {
               ))}
             </div>
           ) : imageUrls.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
-              {imageUrls.map((url, index) => (
-                <Card key={index} className="aspect-video overflow-hidden relative">
-                  <CardContent className="p-0 h-full relative">
-                    <Image
-                      src={url}
-                      alt={`生成的图像 ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="w-full max-w-2xl">
+              <ImageGallery
+                images={imageUrls}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              />
             </div>
           ) : (
             <Card className="aspect-video max-w-2xl w-full">

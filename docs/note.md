@@ -63,3 +63,15 @@ images: {
 
 **问题**：使用 `fill` 属性时父元素 position 不能是 static
 **解决**：为父元素添加 `relative` 类
+
+## 10. DialogContent 需要 DialogTitle 保证无障碍访问
+
+**问题**：`DialogContent` 需要 `DialogTitle` 供屏幕阅读器访问
+**解决**：在 `DialogContent` 内部添加 `sr-only` 的 `DialogTitle`：
+
+```tsx
+<DialogContent>
+  <DialogTitle className="sr-only">Image Preview</DialogTitle>
+  {/* children */}
+</DialogContent>
+```
