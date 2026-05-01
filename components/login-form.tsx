@@ -99,7 +99,7 @@ export function LoginForm({
                 href="/auth/sign-up"
                 className="underline underline-offset-4"
               >
-                Sign up
+                注册
               </Link>
             </div>
           </form>

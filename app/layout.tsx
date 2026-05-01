@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { AnimatedNavigationTabs } from "@/components/ui/animated-navigation-tabs";
 import "./globals.css";
+
+const NAV_ITEMS = [
+  { id: 1, tile: "首页" },
+  { id: 2, tile: "关于" },
+  { id: 3, tile: "支持" },
+  { id: 4, tile: "登陆", isAuth: true },
+];
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -33,6 +41,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <AnimatedNavigationTabs items={NAV_ITEMS} />
           {children}
         </ThemeProvider>
       </body>
