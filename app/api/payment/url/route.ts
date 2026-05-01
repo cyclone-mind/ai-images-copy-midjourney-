@@ -36,8 +36,8 @@ export async function POST(request: Request) {
     const outTradeNo = generateOutTradeNo();
     const pid = process.env.ZPAY_PID!;
     const key = process.env.ZPAY_KEY!;
-    const notifyUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/payment/webhook`;
-    const returnUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/protected`;
+    const notifyUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/payment/webhook`;
+    const returnUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/protected`;
 
     const { error: insertError } = await adminClient
       .from('payment_orders')
