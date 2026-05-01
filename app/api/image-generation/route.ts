@@ -2,6 +2,43 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
+async function downloadImage(url: string): Promise<ArrayBuffer> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to download image: ${response.statusText}`);
+  }
+  return response.arrayBuffer();
+}
+
+async function uploadToStorage(
+  adminClient: Awaited<ReturnType<typeof createAdminClient>>,
+  userId: string,
+  imageData: ArrayBuffer,
+  index: number,
+  generationId: string
+): Promise<string> {
+  const fileName = `${userId}/${generationId}/${index + 1}.png`;
+  const buffer = Buffer.from(imageData);
+
+  const { data, error } = await adminClient.storage
+    .from('generated-images')
+    .upload(fileName, buffer, {
+      contentType: 'image/png',
+      upsert: true,
+    });
+
+  if (error) {
+    console.error('Error uploading to storage:', error);
+    throw new Error('Failed to upload image');
+  }
+
+  const { data: urlData } = adminClient.storage
+    .from('generated-images')
+    .getPublicUrl(fileName);
+
+  return urlData.publicUrl;
+}
+
 export async function POST(request: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -14,18 +51,18 @@ export async function POST(request: Request) {
   const creditsUsed = 1;
   const adminClient = await createAdminClient();
 
-    try {
-      const { prompt } = await request.json();
+  try {
+    const { prompt } = await request.json();
 
-      if (!prompt || !prompt.trim()) {
-        return NextResponse.json({ error: "请输入图像描述" }, { status: 400 });
-      }
+    if (!prompt || !prompt.trim()) {
+      return NextResponse.json({ error: "请输入图像描述" }, { status: 400 });
+    }
 
-      if (prompt.length > 1500) {
-        return NextResponse.json({ error: "描述过长，请控制在 1500 字符以内" }, { status: 400 });
-      }
+    if (prompt.length > 1500) {
+      return NextResponse.json({ error: "描述过长，请控制在 1500 字符以内" }, { status: 400 });
+    }
 
-      const deductResult = await adminClient.rpc('deduct_credits', {
+    const deductResult = await adminClient.rpc('deduct_credits', {
       p_user_id: userId,
       p_amount: creditsUsed
     });
@@ -76,8 +113,14 @@ export async function POST(request: Request) {
         throw new Error("生成失败，未返回图片");
       }
 
-      imageUrls = data.data.image_urls;
-      generationId = data.id || '';
+      generationId = data.id || `gen_${Date.now()}`;
+
+      const uploadPromises = data.data.image_urls.map(async (url: string, index: number) => {
+        const imageData = await downloadImage(url);
+        return uploadToStorage(adminClient, userId, imageData, index, generationId);
+      });
+
+      imageUrls = await Promise.all(uploadPromises);
 
     } catch (generationError) {
       await adminClient.rpc('refund_credits', {
