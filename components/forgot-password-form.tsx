@@ -88,7 +88,7 @@ export function ForgotPasswordForm({
               <div className="mt-4 text-center text-sm">
                 已有账户？{" "}
                 <Link
-                  href="/sign-in"
+                  href="/login"
                   className="underline underline-offset-4"
                 >
                   登录

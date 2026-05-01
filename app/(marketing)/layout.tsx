@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { id: 1, tile: "首页", href: "/" },
   { id: 2, tile: "关于", href: "/about" },
   { id: 3, tile: "支持", href: "/support" },
-  { id: 4, tile: "登陆", href: "/sign-in", isAuth: true },
+  { id: 4, tile: "登陆", href: "/login", isAuth: true },
 ];
 
 const geistSans = Geist({

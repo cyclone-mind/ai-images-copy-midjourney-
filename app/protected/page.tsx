@@ -37,21 +37,17 @@ export default function ProtectedPage() {
           </Button>
         </div>
 
-        <div>
+        <div className="flex flex-col items-center">
           <h2 className="text-xl font-semibold mb-4">我的创作</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map((i) => (
-              <Card key={i} className="aspect-square">
-                <CardContent className="flex items-center justify-center h-full p-0">
-                  <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
-                    <Sparkles className="w-8 h-8" />
-                    <span className="text-sm">暂无图像</span>
-                    <span className="text-xs">生成你的第一张图像</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Card className="aspect-video max-w-2xl w-full">
+            <CardContent className="flex items-center justify-center h-full p-0">
+              <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
+                <Sparkles className="w-8 h-8" />
+                <span className="text-sm">暂无图像</span>
+                <span className="text-xs">生成你的第一张图像</span>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

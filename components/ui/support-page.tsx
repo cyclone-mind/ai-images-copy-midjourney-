@@ -42,7 +42,7 @@ function Support() {
           <div className="flex flex-col gap-4 items-center mt-8">
             <p className="text-muted-foreground">还有其他问题？</p>
             <Button asChild size="lg">
-              <Link href="/sign-in">联系我们</Link>
+              <Link href="/login">联系我们</Link>
             </Button>
           </div>
         </div>

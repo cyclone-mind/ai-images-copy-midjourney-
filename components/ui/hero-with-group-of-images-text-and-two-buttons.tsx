@@ -25,12 +25,12 @@ function Hero() {
             </div>
             <div className="flex flex-row gap-4">
               <Button size="lg" className="gap-4" variant="outline" asChild>
-                <Link href="/sign-in">
+                <Link href="/login">
                   预约演示 <Sparkles className="w-4 h-4" />
                 </Link>
               </Button>
               <Button size="lg" className="gap-4" asChild>
-                <Link href="/sign-in">
+                <Link href="/login">
                   免费开始 <MoveRight className="w-4 h-4" />
                 </Link>
               </Button>

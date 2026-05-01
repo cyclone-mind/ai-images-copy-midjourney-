@@ -22,7 +22,7 @@ export function AnimatedNavigationTabs({ items }: Props) {
   const logout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    window.location.href = "/sign-in";
+    window.location.href = "/login";
   };
 
   return (
@@ -40,14 +40,14 @@ export function AnimatedNavigationTabs({ items }: Props) {
                 ) : (
                   <div className="flex items-center gap-1">
                     <Link
-                      href="/sign-in"
+                      href="/login"
                       className={cn(
                         "px-5 py-2 relative duration-300 transition-colors hover:!text-primary",
-                        pathname === "/sign-in" ? "text-primary" : "text-muted-foreground"
+                        pathname === "/login" ? "text-primary" : "text-muted-foreground"
                       )}
                     >
                       登录
-                      {pathname === "/sign-in" && (
+                      {pathname === "/login" && (
                         <motion.div
                           layoutId="active-auth"
                           className="absolute bottom-0 left-0 right-0 w-full h-0.5 bg-primary"
