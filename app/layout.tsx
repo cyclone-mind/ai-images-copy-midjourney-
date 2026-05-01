@@ -5,10 +5,10 @@ import { AnimatedNavigationTabs } from "@/components/ui/animated-navigation-tabs
 import "./globals.css";
 
 const NAV_ITEMS = [
-  { id: 1, tile: "首页" },
-  { id: 2, tile: "关于" },
-  { id: 3, tile: "支持" },
-  { id: 4, tile: "登陆", isAuth: true },
+  { id: 1, tile: "首页", href: "/" },
+  { id: 2, tile: "关于", href: "/about" },
+  { id: 3, tile: "支持", href: "/support" },
+  { id: 4, tile: "登陆", href: "/auth/sign-in", isAuth: true },
 ];
 
 const defaultUrl = process.env.VERCEL_URL
@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${geistSans.className} antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -1,4 +1,6 @@
-import { MoveRight, PhoneCall } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { MoveRight, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,32 +12,40 @@ function Hero() {
         <div className="grid grid-cols-1 gap-8 items-center md:grid-cols-2">
           <div className="flex gap-4 flex-col">
             <div>
-              <Badge variant="outline">We&apos;re live!</Badge>
+              <Badge variant="outline">AI 驱动的创意工具</Badge>
             </div>
             <div className="flex gap-4 flex-col">
               <h1 className="text-5xl md:text-7xl max-w-lg tracking-tighter text-left font-regular">
-                This is the start of something!
+                用文字描绘想象
               </h1>
               <p className="text-xl leading-relaxed tracking-tight text-muted-foreground max-w-md text-left">
-                Managing a small business today is already tough. Avoid further
-                complications by ditching outdated, tedious trade methods. Our
-                goal is to streamline SMB trade, making it easier and faster than
-                ever.
+                只需输入一段描述文字，即可生成惊艳的图像作品。告别繁琐的设计流程，让 AI
+                成为你的创意伙伴，快速将灵感变为现实。
               </p>
             </div>
             <div className="flex flex-row gap-4">
-              <Button size="lg" className="gap-4" variant="outline">
-                Jump on a call <PhoneCall className="w-4 h-4" />
+              <Button size="lg" className="gap-4" variant="outline" asChild>
+                <Link href="/sign-in">
+                  预约演示 <Sparkles className="w-4 h-4" />
+                </Link>
               </Button>
-              <Button size="lg" className="gap-4">
-                Sign up here <MoveRight className="w-4 h-4" />
+              <Button size="lg" className="gap-4" asChild>
+                <Link href="/sign-in">
+                  免费开始 <MoveRight className="w-4 h-4" />
+                </Link>
               </Button>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-8">
-            <div className="bg-muted rounded-md aspect-square"></div>
-            <div className="bg-muted rounded-md row-span-2"></div>
-            <div className="bg-muted rounded-md aspect-square"></div>
+            <div className="relative rounded-md aspect-square overflow-hidden">
+              <Image src="/images/ai-images1.jpeg" alt="AI generated art 1" fill className="object-cover" />
+            </div>
+            <div className="relative rounded-md row-span-2 overflow-hidden">
+              <Image src="/images/ai-images3.png" alt="AI generated art 2" fill className="object-cover" />
+            </div>
+            <div className="relative rounded-md aspect-square overflow-hidden">
+              <Image src="/images/ai-images2.png" alt="AI generated art 3" fill className="object-cover" />
+            </div>
           </div>
         </div>
       </div>

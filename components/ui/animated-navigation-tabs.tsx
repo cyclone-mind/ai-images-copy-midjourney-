@@ -1,17 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
 export function AnimatedNavigationTabs({ items }: Props) {
-  const [active, setActive] = useState<Props>(items[0]);
-  const [isHover, setIsHover] = useState<Props | null>(null);
+  const pathname = usePathname();
   const [user, setUser] = useState<{ email?: string } | null>(null);
 
   useEffect(() => {
@@ -24,7 +22,7 @@ export function AnimatedNavigationTabs({ items }: Props) {
   const logout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    window.location.href = "/auth/login";
+    window.location.href = "/sign-in";
   };
 
   return (
@@ -42,24 +40,14 @@ export function AnimatedNavigationTabs({ items }: Props) {
                 ) : (
                   <div className="flex items-center gap-1">
                     <Link
-                      href="/auth/login"
+                      href="/sign-in"
                       className={cn(
                         "px-5 py-2 relative duration-300 transition-colors hover:!text-primary",
-                        active.id === item.id ? "text-primary" : "text-muted-foreground"
+                        pathname === "/sign-in" ? "text-primary" : "text-muted-foreground"
                       )}
-                      onClick={() => setActive(item)}
-                      onMouseEnter={() => setIsHover(item)}
-                      onMouseLeave={() => setIsHover(null)}
                     >
                       登录
-                      {isHover?.id === item.id && (
-                        <motion.div
-                          layoutId="hover-bg-auth"
-                          className="absolute bottom-0 left-0 right-0 w-full h-full bg-primary/10"
-                          style={{ borderRadius: 6 }}
-                        />
-                      )}
-                      {active.id === item.id && (
+                      {pathname === "/sign-in" && (
                         <motion.div
                           layoutId="active-auth"
                           className="absolute bottom-0 left-0 right-0 w-full h-0.5 bg-primary"
@@ -70,21 +58,11 @@ export function AnimatedNavigationTabs({ items }: Props) {
                       href="/auth/sign-up"
                       className={cn(
                         "px-5 py-2 relative duration-300 transition-colors hover:!text-primary",
-                        active.id === item.id + 1 ? "text-primary" : "text-muted-foreground"
+                        pathname === "/auth/sign-up" ? "text-primary" : "text-muted-foreground"
                       )}
-                      onClick={() => setActive({ ...item, id: item.id + 1 })}
-                      onMouseEnter={() => setIsHover({ ...item, id: item.id + 1 })}
-                      onMouseLeave={() => setIsHover(null)}
                     >
                       注册
-                      {isHover?.id === item.id + 1 && (
-                        <motion.div
-                          layoutId="hover-bg-auth"
-                          className="absolute bottom-0 left-0 right-0 w-full h-full bg-primary/10"
-                          style={{ borderRadius: 6 }}
-                        />
-                      )}
-                      {active.id === item.id + 1 && (
+                      {pathname === "/auth/sign-up" && (
                         <motion.div
                           layoutId="active-auth"
                           className="absolute bottom-0 left-0 right-0 w-full h-0.5 bg-primary"
@@ -94,38 +72,21 @@ export function AnimatedNavigationTabs({ items }: Props) {
                   </div>
                 )
               ) : (
-                <button
+                <Link
+                  href={item.href || "/"}
                   className={cn(
                     "px-5 py-2 relative duration-300 transition-colors hover:!text-primary",
-                    active.id === item.id ? "text-primary" : "text-muted-foreground"
+                    pathname === item.href ? "text-primary" : "text-muted-foreground"
                   )}
-                  onClick={() => setActive(item)}
-                  onMouseEnter={() => setIsHover(item)}
-                  onMouseLeave={() => setIsHover(null)}
                 >
                   {item.tile}
-                  {isHover?.id === item.id && (
-                    <motion.div
-                      layoutId="hover-bg"
-                      className="absolute bottom-0 left-0 right-0 w-full h-full bg-primary/10"
-                      style={{
-                        borderRadius: 6,
-                      }}
-                    />
-                  )}
-                  {active.id === item.id && (
+                  {pathname === item.href && (
                     <motion.div
                       layoutId="active"
                       className="absolute bottom-0 left-0 right-0 w-full h-0.5 bg-primary"
                     />
                   )}
-                  {isHover?.id === item.id && (
-                    <motion.div
-                      layoutId="hover"
-                      className="absolute bottom-0 left-0 right-0 w-full h-0.5 bg-primary"
-                    />
-                  )}
-                </button>
+                </Link>
               )}
             </li>
           ))}
@@ -138,5 +99,6 @@ export function AnimatedNavigationTabs({ items }: Props) {
 type Props = {
   id: number;
   tile: string;
+  href?: string;
   isAuth?: boolean;
 };
