@@ -23,16 +23,16 @@ function verifySign(params: Record<string, string>, key: string): boolean {
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const pid = searchParams.get('pid');
-    const tradeNo = searchParams.get('trade_no');
-    const outTradeNo = searchParams.get('out_trade_no');
-    const tradeStatus = searchParams.get('trade_status');
-    const money = searchParams.get('money');
-    const sign = searchParams.get('sign');
-    const type = searchParams.get('type');
-    const name = searchParams.get('name');
-    const param = searchParams.get('param');
+    const url = new URL(request.url);
+    const pid = url.searchParams.get('pid');
+    const tradeNo = url.searchParams.get('trade_no');
+    const outTradeNo = url.searchParams.get('out_trade_no');
+    const tradeStatus = url.searchParams.get('trade_status');
+    const money = url.searchParams.get('money');
+    const sign = url.searchParams.get('sign');
+    const type = url.searchParams.get('type');
+    const nameRaw = url.searchParams.get('name');
+    const param = url.searchParams.get('param');
 
     if (!pid || !outTradeNo || !tradeStatus || !money || !sign) {
       return new Response('fail', { status: 400 });
@@ -46,13 +46,14 @@ export async function GET(request: Request) {
 
     const params: Record<string, string> = {
       pid: pid || '',
-      name: name || '',
+      name: nameRaw || '',
       money: money || '',
       out_trade_no: outTradeNo || '',
       trade_no: tradeNo || '',
       trade_status: tradeStatus || '',
       type: type || '',
-      param: param || ''
+      param: param || '',
+      sign: sign || ''
     };
 
     if (!verifySign(params, key)) {

@@ -13,6 +13,11 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse;
   }
 
+  // Skip auth check for API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    return supabaseResponse;
+  }
+
   // With Fluid compute, don't put this client in a global environment
   // variable. Always create a new one on each request.
   const supabase = createServerClient(

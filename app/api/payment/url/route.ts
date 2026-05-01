@@ -57,6 +57,7 @@ export async function POST(request: Request) {
 
     const params: Record<string, string> = {
       pid: pid,
+      type: 'alipay',
       name: pkg.name,
       money: pkg.money,
       out_trade_no: outTradeNo,

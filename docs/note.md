@@ -75,3 +75,10 @@ images: {
   {/* children */}
 </DialogContent>
 ```
+
+## 11. 支付回调签名验证失败
+
+**问题**：支付回调一直返回 `Sign verification failed`
+**原因**：签名参数 `sign` 从 URL 中提取后没有添加到用于验证签名的 `params` 对象中，导致 `verifySign` 函数中 `params.sign` 为 `undefined`，函数直接返回 `false`
+**解决**：将 `sign` 字段添加到 `params` 对象中
+**教训**：提取的参数必须实际用于后续逻辑，提取但不使用是常见的疏漏

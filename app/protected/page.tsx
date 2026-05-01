@@ -154,9 +154,9 @@ function ProtectedContent() {
                 <span className="font-medium">{isInitialLoading ? "..." : credits}</span>
                 <span className="text-muted-foreground text-sm">点数</span>
               </div>
-              <Button variant="outline" size="icon">
+              {/* <Button variant="outline" size="icon">
                 <Plus className="w-4 h-4" />
-              </Button>
+              </Button> */}
               <Button onClick={() => setPaymentDialogOpen(true)}>
                 <CreditCard className="w-4 h-4 mr-2" />
                 充值
