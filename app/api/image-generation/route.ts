@@ -14,14 +14,18 @@ export async function POST(request: Request) {
   const creditsUsed = 1;
   const adminClient = await createAdminClient();
 
-  try {
-    const { prompt } = await request.json();
+    try {
+      const { prompt } = await request.json();
 
-    if (!prompt || !prompt.trim()) {
-      return NextResponse.json({ error: "请输入图像描述" }, { status: 400 });
-    }
+      if (!prompt || !prompt.trim()) {
+        return NextResponse.json({ error: "请输入图像描述" }, { status: 400 });
+      }
 
-    const deductResult = await adminClient.rpc('deduct_credits', {
+      if (prompt.length > 1500) {
+        return NextResponse.json({ error: "描述过长，请控制在 1500 字符以内" }, { status: 400 });
+      }
+
+      const deductResult = await adminClient.rpc('deduct_credits', {
       p_user_id: userId,
       p_amount: creditsUsed
     });

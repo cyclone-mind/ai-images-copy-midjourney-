@@ -3,10 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { ImageGallery } from "@/components/ui/image-preview";
 import { Sparkles, Plus, CreditCard, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { MyGallery } from "@/components/ui/my-gallery";
 
 interface HistoryItem {
   id: string;
@@ -156,42 +155,8 @@ export default function ProtectedPage() {
         </div>
 
         <div className="flex flex-col items-center">
-          <h2 className="text-xl font-semibold mb-4">我的创作</h2>
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
-              {[1, 2, 3, 4].map((i) => (
-                <Card key={i} className="aspect-video">
-                  <CardContent className="flex items-center justify-center h-full p-0">
-                    <div className="w-full h-full bg-muted animate-pulse rounded-md" />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : imageUrls.length > 0 ? (
-            <div className="w-full max-w-2xl">
-              <ImageGallery
-                images={imageUrls}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-              />
-            </div>
-          ) : history.length > 0 ? (
-            <div className="w-full max-w-2xl">
-              <ImageGallery
-                images={history[0].image_urls}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-              />
-            </div>
-          ) : (
-            <Card className="aspect-video max-w-2xl w-full">
-              <CardContent className="flex items-center justify-center h-full p-0">
-                <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
-                  <Sparkles className="w-8 h-8" />
-                  <span className="text-sm">暂无图像</span>
-                  <span className="text-xs">生成你的第一张图像</span>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+          <h2 className="text-xl font-semibold mb-4">我的图库</h2>
+          <MyGallery history={history} isLoading={isLoading} />
         </div>
       </div>
     </div>
