@@ -48,3 +48,29 @@ BEGIN
   RETURN v_current_credits + p_amount;
 END;
 $$ LANGUAGE plpgsql;
+
+-- 增加点数函数
+CREATE OR REPLACE FUNCTION add_credits(p_user_id UUID, p_amount INTEGER DEFAULT 1)
+RETURNS INTEGER AS $$
+DECLARE
+  v_current_credits INTEGER;
+BEGIN
+  SELECT credits INTO v_current_credits
+  FROM public.ai_images_creator_credits
+  WHERE user_id = p_user_id
+  FOR UPDATE;
+
+  IF v_current_credits IS NULL THEN
+    INSERT INTO public.ai_images_creator_credits (user_id, credits)
+    VALUES (p_user_id, p_amount)
+    RETURNING credits INTO v_current_credits;
+  ELSE
+    UPDATE public.ai_images_creator_credits
+    SET credits = credits + p_amount, updated_at = NOW()
+    WHERE user_id = p_user_id
+    RETURNING credits INTO v_current_credits;
+  END IF;
+
+  RETURN v_current_credits;
+END;
+$$ LANGUAGE plpgsql;
