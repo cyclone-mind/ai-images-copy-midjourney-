@@ -22,7 +22,7 @@ export async function AuthButton() {
         <Link href="/sign-in">登录</Link>
       </Button>
       <Button asChild size="sm" variant={"default"}>
-        <Link href="/auth/sign-up">注册</Link>
+        <Link href="/sign-up">注册</Link>
       </Button>
     </div>
   );

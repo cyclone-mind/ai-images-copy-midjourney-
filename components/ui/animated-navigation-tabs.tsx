@@ -55,14 +55,14 @@ export function AnimatedNavigationTabs({ items }: Props) {
                       )}
                     </Link>
                     <Link
-                      href="/auth/sign-up"
+                      href="/sign-up"
                       className={cn(
                         "px-5 py-2 relative duration-300 transition-colors hover:!text-primary",
-                        pathname === "/auth/sign-up" ? "text-primary" : "text-muted-foreground"
+                        pathname === "/sign-up" ? "text-primary" : "text-muted-foreground"
                       )}
                     >
                       注册
-                      {pathname === "/auth/sign-up" && (
+                      {pathname === "/sign-up" && (
                         <motion.div
                           layoutId="active-auth"
                           className="absolute bottom-0 left-0 right-0 w-full h-0.5 bg-primary"
