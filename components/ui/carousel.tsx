@@ -100,7 +100,7 @@ const Carousel = React.forwardRef<
     }, [api, onSelect]);
 
     React.useEffect(() => {
-      if (setApi) {
+      if (setApi && api) {
         setApi(api);
       }
     }, [api, setApi]);

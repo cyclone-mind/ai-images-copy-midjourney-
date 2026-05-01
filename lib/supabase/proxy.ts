@@ -47,17 +47,25 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
+  const isAuthPage = request.nextUrl.pathname.startsWith("/login") ||
+                     request.nextUrl.pathname.startsWith("/sign-up") ||
+                     request.nextUrl.pathname.startsWith("/forgot-password") ||
+                     request.nextUrl.pathname.startsWith("/update-password");
+
+  if (user && isAuthPage) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/protected";
+    return NextResponse.redirect(url);
+  }
+
   if (
     request.nextUrl.pathname !== "/" &&
     !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/sign-up") &&
-    !request.nextUrl.pathname.startsWith("/forgot-password") &&
-    !request.nextUrl.pathname.startsWith("/update-password") &&
+    !isAuthPage &&
     !request.nextUrl.pathname.startsWith("/about") &&
-    !request.nextUrl.pathname.startsWith("/support")
+    !request.nextUrl.pathname.startsWith("/support") &&
+    !request.nextUrl.pathname.startsWith("/contact")
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

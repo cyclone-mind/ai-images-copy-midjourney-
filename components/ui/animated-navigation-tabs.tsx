@@ -35,7 +35,7 @@ export function AnimatedNavigationTabs({ items }: Props) {
                 user ? (
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Hey, {user.email}</span>
-                    <Button size="sm" variant="outline" onClick={logout}>Logout</Button>
+                    <Button size="sm" variant="outline" onClick={logout}>退出</Button>
                   </div>
                 ) : (
                   <div className="flex items-center gap-1">
@@ -96,9 +96,13 @@ export function AnimatedNavigationTabs({ items }: Props) {
   );
 }
 
-type Props = {
+type NavItem = {
   id: number;
   tile: string;
   href?: string;
   isAuth?: boolean;
+};
+
+type Props = {
+  items: NavItem[];
 };

@@ -1,11 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, Plus, CreditCard, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { MyGallery } from "@/components/ui/my-gallery";
+import { PaymentDialog } from "@/components/ui/payment-dialog";
+import { PaymentResultDialog } from "@/components/ui/payment-result-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface HistoryItem {
   id: string;
@@ -15,7 +19,8 @@ interface HistoryItem {
   created_at: string;
 }
 
-export default function ProtectedPage() {
+function ProtectedContent() {
+  const searchParams = useSearchParams();
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +28,9 @@ export default function ProtectedPage() {
   const [credits, setCredits] = useState<number>(0);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [paymentResultOpen, setPaymentResultOpen] = useState(false);
+  const [outTradeNo, setOutTradeNo] = useState<string | null>(null);
 
   const supabase = createClient();
 
@@ -59,6 +67,16 @@ export default function ProtectedPage() {
   useEffect(() => {
     loadUserData();
   }, [loadUserData]);
+
+  useEffect(() => {
+    const tradeNo = searchParams.get("out_trade_no");
+    const result = searchParams.get("result");
+
+    if (tradeNo && result === "1") {
+      setOutTradeNo(tradeNo);
+      setPaymentResultOpen(true);
+    }
+  }, [searchParams]);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -98,6 +116,23 @@ export default function ProtectedPage() {
     }
   };
 
+  const handlePaymentSuccess = (newCredits: number) => {
+    setCredits(newCredits);
+    setPaymentResultOpen(false);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("out_trade_no");
+    url.searchParams.delete("result");
+    window.history.replaceState({}, "", url.toString());
+  };
+
+  const handlePaymentResultClose = () => {
+    setPaymentResultOpen(false);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("out_trade_no");
+    url.searchParams.delete("result");
+    window.history.replaceState({}, "", url.toString());
+  };
+
   return (
     <div className="w-full max-w-7xl mx-auto py-8 px-4">
       <div className="flex flex-col gap-8">
@@ -122,7 +157,7 @@ export default function ProtectedPage() {
               <Button variant="outline" size="icon">
                 <Plus className="w-4 h-4" />
               </Button>
-              <Button>
+              <Button onClick={() => setPaymentDialogOpen(true)}>
                 <CreditCard className="w-4 h-4 mr-2" />
                 充值
               </Button>
@@ -159,6 +194,47 @@ export default function ProtectedPage() {
           <MyGallery history={history} isLoading={isLoading} />
         </div>
       </div>
+
+      <PaymentDialog
+        open={paymentDialogOpen}
+        onOpenChange={setPaymentDialogOpen}
+        onPaymentSuccess={(newCredits) => setCredits(newCredits)}
+      />
+
+      <PaymentResultDialog
+        open={paymentResultOpen}
+        outTradeNo={outTradeNo}
+        onOpenChange={setPaymentResultOpen}
+        onSuccess={handlePaymentSuccess}
+        onClose={handlePaymentResultClose}
+      />
     </div>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="w-full max-w-7xl mx-auto py-8 px-4">
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
+          <Skeleton className="h-10 w-48" />
+          <div className="flex gap-4 items-center">
+            <Skeleton className="h-12 flex-1" />
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-10" />
+          </div>
+          <Skeleton className="h-12 w-full md:w-48" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ProtectedPage() {
+  return (
+    <Suspense fallback={<LoadingSkeleton />}>
+      <ProtectedContent />
+    </Suspense>
   );
 }
