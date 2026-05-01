@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  let supabase = await createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -11,6 +12,7 @@ export async function POST(request: Request) {
 
   const userId = user.id;
   const creditsUsed = 1;
+  const adminClient = await createAdminClient();
 
   try {
     const { prompt } = await request.json();
@@ -19,7 +21,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "请输入图像描述" }, { status: 400 });
     }
 
-    const deductResult = await supabase.rpc('deduct_credits', {
+    const deductResult = await adminClient.rpc('deduct_credits', {
       p_user_id: userId,
       p_amount: creditsUsed
     });
@@ -74,7 +76,7 @@ export async function POST(request: Request) {
       generationId = data.id || '';
 
     } catch (generationError) {
-      await supabase.rpc('refund_credits', {
+      await adminClient.rpc('refund_credits', {
         p_user_id: userId,
         p_amount: creditsUsed
       });
@@ -82,7 +84,7 @@ export async function POST(request: Request) {
       throw generationError;
     }
 
-    const { error: historyError } = await supabase
+    const { error: historyError } = await adminClient
       .from('ai_images_creator_history')
       .insert({
         user_id: userId,
