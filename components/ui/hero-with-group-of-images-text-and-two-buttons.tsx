@@ -38,13 +38,33 @@ function Hero() {
           </div>
           <div className="grid grid-cols-2 gap-8">
             <div className="relative rounded-md aspect-square overflow-hidden">
-              <Image src="/images/ai-images1.jpeg" alt="AI generated art 1" fill className="object-cover" />
+              <Image 
+                src="/images/ai-images1.jpeg" 
+                alt="AI generated art 1" 
+                fill 
+                className="object-cover"
+                sizes="(max-width: 768px) 50vw, 25vw"
+                priority
+              />
             </div>
             <div className="relative rounded-md row-span-2 overflow-hidden">
-              <Image src="/images/ai-images3.png" alt="AI generated art 2" fill className="object-cover" />
+              <Image 
+                src="/images/ai-images3.png" 
+                alt="AI generated art 2" 
+                fill 
+                className="object-cover"
+                sizes="(max-width: 768px) 50vw, 25vw"
+                priority
+              />
             </div>
             <div className="relative rounded-md aspect-square overflow-hidden">
-              <Image src="/images/ai-images2.png" alt="AI generated art 3" fill className="object-cover" />
+              <Image 
+                src="/images/ai-images2.png" 
+                alt="AI generated art 3" 
+                fill 
+                className="object-cover"
+                sizes="(max-width: 768px) 50vw, 25vw"
+              />
             </div>
           </div>
         </div>
