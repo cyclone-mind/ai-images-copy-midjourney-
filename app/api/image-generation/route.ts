@@ -50,8 +50,22 @@ export async function POST(request: Request) {
   }
 
   const userId = user.id;
-  const creditsUsed = 1;
+  const creditsUsed = 0.13;
   const adminClient = await createAdminClient();
+
+  const { data: creditsData, error: creditsError } = await supabase
+    .from('ai_images_creator_credits')
+    .select('credits')
+    .eq('user_id', userId)
+    .single();
+
+  if (creditsError || !creditsData) {
+    return NextResponse.json({ error: "无法获取点数信息" }, { status: 500 });
+  }
+
+  if (creditsData.credits < creditsUsed) {
+    return NextResponse.json({ error: "点数不足" }, { status: 400 });
+  }
 
   try {
     const { prompt } = await request.json();
