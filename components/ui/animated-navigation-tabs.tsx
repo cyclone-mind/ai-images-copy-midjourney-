@@ -28,7 +28,7 @@ export function AnimatedNavigationTabs({ items }: Props) {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container flex h-14 items-center justify-center">
-        <ul className="flex items-center justify-center">
+        <ul className="flex items-center justify-center list-none m-0 p-0">
           {items.map((item) => (
             <li key={item.id}>
               {item.isAuth ? (
