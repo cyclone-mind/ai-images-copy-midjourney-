@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS public.ai_images_creator_credits (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    credits INTEGER NOT NULL DEFAULT 0 CHECK (credits >= 0),
+    credits DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (credits >= 0),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     CONSTRAINT ai_images_creator_credits_user_id_key UNIQUE (user_id)

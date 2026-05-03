@@ -1,9 +1,9 @@
 -- 扣除点数函数
-CREATE OR REPLACE FUNCTION deduct_credits(p_user_id UUID, p_amount INTEGER DEFAULT 1)
-RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION deduct_credits(p_user_id UUID, p_amount DECIMAL(10,2) DEFAULT 1)
+RETURNS DECIMAL(10,2) AS $$
 DECLARE
-  v_current_credits INTEGER;
-  v_new_credits INTEGER;
+  v_current_credits DECIMAL(10,2);
+  v_new_credits DECIMAL(10,2);
 BEGIN
   SELECT credits INTO v_current_credits
   FROM public.ai_images_creator_credits
@@ -27,10 +27,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- 退还点数函数
-CREATE OR REPLACE FUNCTION refund_credits(p_user_id UUID, p_amount INTEGER DEFAULT 1)
-RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION refund_credits(p_user_id UUID, p_amount DECIMAL(10,2) DEFAULT 1)
+RETURNS DECIMAL(10,2) AS $$
 DECLARE
-  v_current_credits INTEGER;
+  v_current_credits DECIMAL(10,2);
 BEGIN
   SELECT credits INTO v_current_credits
   FROM public.ai_images_creator_credits
@@ -50,10 +50,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- 增加点数函数
-CREATE OR REPLACE FUNCTION add_credits(p_user_id UUID, p_amount INTEGER DEFAULT 1)
-RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION add_credits(p_user_id UUID, p_amount DECIMAL(10,2) DEFAULT 1)
+RETURNS DECIMAL(10,2) AS $$
 DECLARE
-  v_current_credits INTEGER;
+  v_current_credits DECIMAL(10,2);
 BEGIN
   SELECT credits INTO v_current_credits
   FROM public.ai_images_creator_credits

@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS public.ai_images_creator_history (
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     prompt TEXT,
     image_urls TEXT[] NOT NULL CHECK (array_length(image_urls, 1) = 4),
-    credits_used INTEGER NOT NULL DEFAULT 1,
+    credits_used DECIMAL(10,2) NOT NULL DEFAULT 1,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
